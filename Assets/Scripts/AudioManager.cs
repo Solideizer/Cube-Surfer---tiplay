@@ -10,6 +10,7 @@ namespace Managers
 
         private static AudioClip _collectSound;
         private static AudioClip _obstacleSound;
+        private static AudioClip _gemCollectSound;
         private static AudioSource _audioSource;
 
         #endregion
@@ -17,6 +18,7 @@ namespace Managers
         {
             _collectSound = Resources.Load<AudioClip> ("collect");
             _obstacleSound = Resources.Load<AudioClip> ("hit");
+            _gemCollectSound = Resources.Load<AudioClip> ("gemCollect");
 
             _audioSource = GetComponent<AudioSource> ();
         }
@@ -30,6 +32,9 @@ namespace Managers
                     break;
                 case "obstacle":
                     _audioSource.PlayOneShot (_obstacleSound);
+                    break;
+                case "gem":
+                    _audioSource.PlayOneShot (_gemCollectSound);
                     break;
 
             }

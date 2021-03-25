@@ -28,7 +28,7 @@ public class Movement : MonoBehaviour
 
     void Start ()
     {
-        _rb = GetComponent<Rigidbody> ();
+        _rb = GetComponentInChildren<Rigidbody> ();
         _mainCam = Camera.main;
         _currentMoveSpeed = movementSpeed;
         ResetInputValues ();

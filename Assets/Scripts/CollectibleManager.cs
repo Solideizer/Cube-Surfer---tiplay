@@ -11,11 +11,13 @@ namespace Managers
         [SerializeField] private GameObject playerModel;
         [SerializeField] private Transform stackTransform;
         [SerializeField] private TextMeshProUGUI floatingTextPrefab;
+        [SerializeField] private TextMeshProUGUI gemText;
         [SerializeField] private Canvas canvas;
 
 #pragma warning restore 0649
         private Vector3 _spawnPos;
         private Animator _anim;
+        private int gemScore;
 
         #endregion
         private void Awake ()
@@ -23,10 +25,11 @@ namespace Managers
             //playerRb = playerModel.GetComponent<Rigidbody> ();
             _anim = GetComponentInChildren<Animator> ();
             _spawnPos = stackTransform.position;
+            gemText.text = 0. ToString ();
         }
         private void Start ()
         {
-            var firstCube = Instantiate (cubePrefab, new Vector3 (0f, 0f, 0f), Quaternion.identity);
+            var firstCube = Instantiate (cubePrefab, new Vector3 (0f, 0.1f, 0f), Quaternion.identity);
             firstCube.transform.SetParent (stackTransform.transform, false);
         }
         private void OnTriggerEnter (Collider other)
@@ -37,6 +40,14 @@ namespace Managers
                 AudioManager.PlaySound ("collect");
                 TextPopup ();
                 AddCube ();
+            }
+            else if (other.CompareTag ("Gem"))
+            {
+                Destroy (other.gameObject);
+                AudioManager.PlaySound ("gem");
+                gemScore++;
+                gemText.text = gemScore.ToString ();
+
             }
         }
 

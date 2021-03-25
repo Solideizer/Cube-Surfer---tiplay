@@ -3,12 +3,15 @@ using UnityEngine.UI;
 
 public class ProgressBar : MonoBehaviour
 {
+    #region Variable Declarations
+#pragma warning disable 0649
     [SerializeField] private Transform player;
     [SerializeField] private Transform finishLine;
     [SerializeField] private Slider slider;
+#pragma warning restore 0649
 
     private float _maxDistance;
-
+    #endregion
     void Start ()
     {
         _maxDistance = GetDistance ();

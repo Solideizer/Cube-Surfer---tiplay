@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6878324723828483651}
   - component: {fileID: 3608994847345031464}
   - component: {fileID: 1694080733572272317}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collectible Cube
   m_TagString: CollectibleCube
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 6746656070997765879}
   - component: {fileID: 6762192029379208865}
   - component: {fileID: 6772379165119377223}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: block_brick_black_1_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 6746516432010958875}
   - component: {fileID: 6762061112485310299}
   - component: {fileID: 6772742817069802549}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: block_brick_black_1_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -257,7 +257,7 @@ GameObject:
   - component: {fileID: 6755350217453415231}
   - component: {fileID: 6762893127371167581}
   - component: {fileID: 6772104396735913905}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: block_brick_black_1_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
