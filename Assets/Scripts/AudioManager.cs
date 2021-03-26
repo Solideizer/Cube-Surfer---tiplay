@@ -16,11 +16,15 @@ namespace Managers
         #endregion
         private void Start ()
         {
+            LoadAudioFiles ();
+            _audioSource = GetComponent<AudioSource> ();
+        }
+
+        private static void LoadAudioFiles ()
+        {
             _collectSound = Resources.Load<AudioClip> ("collect");
             _obstacleSound = Resources.Load<AudioClip> ("hit");
             _gemCollectSound = Resources.Load<AudioClip> ("gemCollect");
-
-            _audioSource = GetComponent<AudioSource> ();
         }
 
         public static void PlaySound (string clip)

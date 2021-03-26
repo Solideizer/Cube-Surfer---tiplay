@@ -1,27 +1,69 @@
+using TMPro;
 using UnityEngine;
-
-public class UiManager : MonoBehaviour
+namespace Managers
 {
-    // public void TextPopup (GameObject cloneTextGO)
-    // {
-    //     TextMeshPro damageText = cloneTextGO.GetComponent<TextMeshPro> ();
+    public class UiManager : MonoBehaviour
+    {
+        #region Variable Declarations
+        public static UiManager instance = null;
+#pragma warning disable 0649
+        [SerializeField] private TextMeshProUGUI gemText;
+        [SerializeField] private TextMeshProUGUI finishGemText;
+        [SerializeField] private TextMeshProUGUI floatingTextPrefab;
+        [SerializeField] private GameObject finishUI;
+        [SerializeField] private Canvas canvas;
+#pragma warning restore 0649
+        private int gemScore;
+        #endregion
+        private void Awake ()
+        {
+            CreateSingletonInstance ();
+        }
 
-    //     if (damageDone > (unitData.baseDamage + (unitData.baseDamage / 10)))
-    //     {
-    //         Color newColor = new Color (1f, 0.1949452f, 0.145098f, 1f);
-    //         damageText.fontSize = 500f;
-    //         damageText.color = newColor;
-    //         damageText.text = damageDone.ToString ("F0");
-    //         CameraShake.Instance.ShakeCamera (3f, 0.5f);
-    //         Destroy (cloneTextGO, 2f);
-    //     }
-    //     else
-    //     {
-    //         Color newColor = new Color (1f, 0.8182157f, 0.145098f, 1f);
-    //         damageText.color = newColor;
-    //         CameraShake.Instance.ShakeCamera (1f, 0.5f);
-    //         damageText.text = damageDone.ToString ("F0");
-    //         Destroy (cloneTextGO, 1f);
-    //     }
-    // }
+        private void CreateSingletonInstance ()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                Destroy (gameObject);
+            }
+        }
+
+        private void Start ()
+        {
+            gemText.text = 0. ToString ();
+        }
+
+        public void HandleGemCollection (int amount, int multiplier)
+        {
+            gemScore += amount;
+            gemScore *= multiplier;
+            gemText.text = gemScore.ToString ();
+        }
+        public void TextPopup ()
+        {
+            var floatingText = Instantiate (floatingTextPrefab, Vector3.zero, Quaternion.identity);
+            floatingText.text = "+1";
+            floatingText.transform.SetParent (canvas.transform);
+            floatingText.transform.position = new Vector3 (230f, 210f, 0f);
+            Destroy (floatingText, 0.4f);
+        }
+        private void OnEnable ()
+        {
+            ObtacleDetector.LevelComplete += LevelComplete;
+        }
+        private void Disable ()
+        {
+            ObtacleDetector.LevelComplete -= LevelComplete;
+        }
+        private void LevelComplete ()
+        {
+            finishGemText.text = gemScore.ToString ();
+            finishUI.SetActive (true);
+        }
+
+    }
 }

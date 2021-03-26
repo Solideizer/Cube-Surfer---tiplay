@@ -7,6 +7,13 @@ TagManager:
   - CollectibleCube
   - ObstacleCube
   - Gem
+  - 1x
+  - 2x
+  - 3x
+  - 4x
+  - 5x
+  - Stack
+  - FinishUI
   layers:
   - Default
   - TransparentFX
@@ -18,7 +25,7 @@ TagManager:
   - 
   - Player
   - Collectibles
-  - 
+  - Dance
   - 
   - 
   - 

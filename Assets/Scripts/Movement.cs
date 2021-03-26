@@ -3,10 +3,10 @@
 public class Movement : MonoBehaviour
 {
     #region Variable Declarations
-    public static Movement _instance;
+    public static Movement instance;
 
 #pragma warning disable 0649
-    [SerializeField] private bool canMove = false;
+    [SerializeField] private bool canMove = true;
     [SerializeField] private float minXPos;
     [SerializeField] private float maxXPos;
     [SerializeField] private float movementSpeed;
@@ -23,7 +23,19 @@ public class Movement : MonoBehaviour
     #endregion
     private void Awake ()
     {
-        _instance = this;
+        CreateSingletonInstance ();
+    }
+
+    private void CreateSingletonInstance ()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy (gameObject);
+        }
     }
 
     void Start ()
@@ -99,6 +111,11 @@ public class Movement : MonoBehaviour
             ResetInputValues ();
         }
 
+    }
+
+    public void StopMovement ()
+    {
+        canMove = false;
     }
 
 }
