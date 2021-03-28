@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Managers;
+using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
@@ -6,7 +7,7 @@ public class Movement : MonoBehaviour
     public static Movement instance;
 
 #pragma warning disable 0649
-    [SerializeField] private bool canMove = true;
+    [SerializeField] private bool canMove = false;
     [SerializeField] private float minXPos;
     [SerializeField] private float maxXPos;
     [SerializeField] private float movementSpeed;
@@ -15,9 +16,9 @@ public class Movement : MonoBehaviour
 #pragma warning restore 0649
 
     private Vector2 _firstTouchPos;
+    private Vector2 _currentTouchPos;
     private float _finalTouchX, _finalTouchZ;
     private float _currentMoveSpeed;
-    private Vector2 _currentTouchPos;
     private Rigidbody _rb;
     private Camera _mainCam;
     #endregion
@@ -48,6 +49,12 @@ public class Movement : MonoBehaviour
 
     void Update ()
     {
+        if (Input.GetMouseButtonDown (0))
+        {
+            UiManager.instance.DisableStartText ();
+            canMove = true;
+
+        };
         if (canMove)
         {
             HandleMovement ();
@@ -61,12 +68,13 @@ public class Movement : MonoBehaviour
         {
             HandleEndlessRun ();
         }
-
     }
 
     void ResetInputValues ()
     {
-        _rb.velocity = new Vector3 (0f, _rb.velocity.y, _rb.velocity.z);
+        var velocity = _rb.velocity;
+        velocity = new Vector3 (0f, velocity.y, velocity.z);
+        _rb.velocity = velocity;
         _firstTouchPos = Vector2.zero;
         _finalTouchX = 0f;
         _currentTouchPos = Vector2.zero;
@@ -74,7 +82,9 @@ public class Movement : MonoBehaviour
 
     void HandleEndlessRun ()
     {
-        _rb.velocity = new Vector3 (_rb.velocity.x, _rb.velocity.y, _currentMoveSpeed * Time.fixedDeltaTime);
+        var velocity = _rb.velocity;
+        velocity = new Vector3 (velocity.x, velocity.y, _currentMoveSpeed * Time.fixedDeltaTime);
+        _rb.velocity = velocity;
     }
 
     void HandleMovement ()
@@ -91,7 +101,9 @@ public class Movement : MonoBehaviour
 
             if (_firstTouchPos == _currentTouchPos)
             {
-                _rb.velocity = new Vector3 (0f, _rb.velocity.y, _rb.velocity.z);
+                var velocity = _rb.velocity;
+                velocity = new Vector3 (0f, velocity.y, velocity.z);
+                _rb.velocity = velocity;
             }
             _finalTouchX = transform.position.x;
 

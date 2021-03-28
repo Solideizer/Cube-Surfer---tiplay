@@ -1,27 +1,34 @@
 using System;
+using System.Collections;
 using Managers;
 using UnityEngine;
 
 public class ObtacleDetector : MonoBehaviour
 {
     public static event Action LevelComplete = delegate { };
-    private GameObject stack;
-    private int finishMultiplier;
+    private Animator _playerAnim;
+    private GameObject _stack;
+    private int _finishMultiplier;
+    private bool _levelComplete;
+    private static readonly int Death = Animator.StringToHash("death");
 
     private void Awake ()
     {
-        stack = GameObject.FindGameObjectWithTag ("Stack");
+        _stack = GameObject.FindGameObjectWithTag ("Stack");
+        _playerAnim = GameObject.FindGameObjectWithTag ("Player").GetComponent<Animator> ();
+        _levelComplete = false;
     }
     private void Update ()
     {
         CheckForObstacles ();
+        StartCoroutine (CheckForRestart ());
     }
     private void CheckForObstacles ()
     {
         Vector3 fwd = transform.TransformDirection (Vector3.forward);
         RaycastHit hitInfo;
-        //Debug.DrawRay (transform.position, fwd * 5f, Color.red);
-        if (Physics.Raycast (transform.position, fwd, out hitInfo, 0.5f))
+
+        if (Physics.Raycast (transform.position, fwd, out hitInfo, 0.6f))
         {
             if (hitInfo.transform.CompareTag ("ObstacleCube"))
             {
@@ -31,7 +38,6 @@ public class ObtacleDetector : MonoBehaviour
             else
             {
                 CheckFinishMultipliers (hitInfo);
-
             }
 
         }
@@ -43,23 +49,23 @@ public class ObtacleDetector : MonoBehaviour
         switch (hitInfo.transform.tag)
         {
             case "1x":
-                finishMultiplier = 1;
+                _finishMultiplier = 1;
                 HandleFinish ();
                 break;
             case "2x":
-                finishMultiplier = 2;
+                _finishMultiplier = 2;
                 HandleFinish ();
                 break;
             case "3x":
-                finishMultiplier = 3;
+                _finishMultiplier = 3;
                 HandleFinish ();
                 break;
             case "4x":
-                finishMultiplier = 4;
+                _finishMultiplier = 4;
                 HandleFinish ();
                 break;
             case "5x":
-                finishMultiplier = 5;
+                _finishMultiplier = 5;
                 HandleFinish ();
                 break;
         }
@@ -74,12 +80,25 @@ public class ObtacleDetector : MonoBehaviour
 
     private void CheckCubeCount ()
     {
-        if (stack.transform.childCount - 1 <= 0)
+        if (_stack.transform.childCount <= 1)
         {
             Movement.instance.StopMovement ();
-            Debug.Log (finishMultiplier);
-            UiManager.instance.HandleGemCollection (0, finishMultiplier);
+            UiManager.instance.HandleGemCollection (0, _finishMultiplier);
             LevelComplete ();
+            _levelComplete = true;
         }
+    }
+    private IEnumerator CheckForRestart ()
+    {
+        if (_levelComplete) yield break;
+        yield return new WaitForSeconds (1f);
+
+        if (_stack.transform.childCount <= 0)
+        {
+            _playerAnim.SetTrigger (Death);
+            Movement.instance.StopMovement ();
+            UiManager.instance.ActivateRestartButton ();
+        }
+
     }
 }

@@ -12,27 +12,27 @@ public class ProgressBar : MonoBehaviour
 
     private float _maxDistance;
     #endregion
-    void Start ()
+    private void Start ()
     {
         _maxDistance = GetDistance ();
     }
 
-    void Update ()
+    private void Update ()
     {
         if (player.position.z <= _maxDistance && player.position.z <= finishLine.position.z)
         {
-            float distance = 1 - (GetDistance () / _maxDistance);
+            var distance = 1 - (GetDistance () / _maxDistance);
             SetProgress (distance);
 
         }
     }
 
-    float GetDistance ()
+    private float GetDistance ()
     {
         return Vector3.Distance (player.position, finishLine.position);
     }
 
-    void SetProgress (float p)
+    private void SetProgress (float p)
     {
         slider.value = p;
     }
